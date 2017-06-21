@@ -7,9 +7,11 @@ namespace Cate.Http.Utils
 {
     public static class Extensions
     {
-        public static void Each<T>(this IEnumerable<T> source, Action<T> action, Func<T, bool> continueWhen = null, Func<T, bool> breakWhen = null)
+        public static void Each<T>(this IEnumerable<T> source, Action<T> action,
+                                   Func<T, bool> continueWhen = null,
+                                   Func<T, bool> breakWhen = null)
         {
-            if (action == null) throw new ArgumentNullException(nameof (action));
+            if (action == null) throw new ArgumentNullException(nameof(action));
 
             foreach (var item in source) {
                 if (continueWhen != null && continueWhen(item)) continue;
@@ -35,8 +37,9 @@ namespace Cate.Http.Utils
             foreach (var sourceProp in sourceProps) {
                 var targetProp = targetProps
                     .FirstOrDefault(tp => tp.Name.Equals(sourceProp.Name) &&
-                                          tp.PropertyType.IsAssignableFrom(sourceProp.PropertyType));
-                
+                                          tp.PropertyType.IsAssignableFrom(sourceProp
+                                              .PropertyType));
+
                 targetProp?.SetValue(target, sourceProp.GetValue(source, null));
             }
 

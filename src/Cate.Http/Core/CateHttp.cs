@@ -54,13 +54,19 @@ namespace Cate.Http.Core
                     _handler = Configuration.HttpClientFactory.GetHandler();
 
                     if (_handler is HttpClientHandler httpClientHandler) {
-                        httpClientHandler.Proxy = Configuration.Proxy;
-                        httpClientHandler.UseProxy = httpClientHandler.Proxy != null;
-                        httpClientHandler.PreAuthenticate = Configuration.PreAuthenticate;
+                        ConfigureClientHandler(httpClientHandler);
                     }
                 }
                 return _handler;
             }
+        }
+
+        private void ConfigureClientHandler(HttpClientHandler httpClientHandler)
+        {
+            httpClientHandler.Proxy = Configuration.Proxy;
+            httpClientHandler.UseProxy = Configuration.Proxy != null;
+            httpClientHandler.PreAuthenticate = Configuration.PreAuthenticate;
+            httpClientHandler.Credentials = Configuration.Credentials;
         }
 
         public HttpClient Client

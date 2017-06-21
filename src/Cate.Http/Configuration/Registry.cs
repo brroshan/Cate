@@ -1,8 +1,8 @@
-﻿using Cate.Http.Factories;
-using Cate.Http.Serializers;
-using System;
+﻿using System;
 using System.Net;
 using System.Xml;
+using Cate.Http.Factories;
+using Cate.Http.Serializers;
 
 namespace Cate.Http.Configuration
 {
@@ -67,6 +67,12 @@ namespace Cate.Http.Configuration
         public Registry UsePreAuthentication(bool preAuthenticate)
         {
             Configuration.PreAuthenticate = preAuthenticate;
+            return this;
+        }
+
+        public Registry WithCredentialCache(ICredentials cc)
+        {
+            Configuration.Credentials = cc;
             return this;
         }
     }

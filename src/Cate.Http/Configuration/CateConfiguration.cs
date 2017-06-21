@@ -25,6 +25,7 @@ namespace Cate.Http.Configuration
 
         public IWebProxy Proxy { get; set; }
         public bool PreAuthenticate { get; set; }
+        public ICredentials Credentials { get; set; }
 
         private void StandardConfiguration()
         {
