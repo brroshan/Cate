@@ -17,7 +17,7 @@ namespace Cate.Http.Core
             request.Properties?.Add(Key, this);
         }
 
-        public Uri Uri { get; set; }
+        public Uri Uri { get; }
 
         public CateConfiguration Configuration { get; set; }
 

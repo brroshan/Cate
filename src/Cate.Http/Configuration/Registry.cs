@@ -1,6 +1,7 @@
 ﻿using Cate.Http.Factories;
 using Cate.Http.Serializers;
 using System;
+using System.Net;
 using System.Xml;
 
 namespace Cate.Http.Configuration
@@ -54,6 +55,18 @@ namespace Cate.Http.Configuration
         public Registry WithTimeout(int seconds)
         {
             Configuration.Timeout = TimeSpan.FromSeconds(seconds);
+            return this;
+        }
+
+        public Registry UseProxy(IWebProxy proxy)
+        {
+            Configuration.Proxy = proxy;
+            return this;
+        }
+
+        public Registry UsePreAuthentication(bool preAuthenticate)
+        {
+            Configuration.PreAuthenticate = preAuthenticate;
             return this;
         }
     }

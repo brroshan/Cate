@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using Cate.Http.Factories;
 using Cate.Http.Serializers;
 
@@ -21,7 +22,10 @@ namespace Cate.Http.Configuration
         public ISerializer XmlSerializer { get; set; }
 
         public CateConfiguration Clone() => (CateConfiguration)MemberwiseClone();
-        
+
+        public IWebProxy Proxy { get; set; }
+        public bool PreAuthenticate { get; set; }
+
         private void StandardConfiguration()
         {
             HttpClientFactory = new StandardFactory();

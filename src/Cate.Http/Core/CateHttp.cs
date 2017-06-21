@@ -46,8 +46,22 @@ namespace Cate.Http.Core
 
         public CateConfiguration Configuration { get; set; }
 
-        public HttpMessageHandler MessageHandler =>
-            _handler ?? (_handler = Configuration.HttpClientFactory.GetHandler());
+        public HttpMessageHandler MessageHandler
+        {
+            get
+            {
+                if (_handler == null) {
+                    _handler = Configuration.HttpClientFactory.GetHandler();
+
+                    if (_handler is HttpClientHandler httpClientHandler) {
+                        httpClientHandler.Proxy = Configuration.Proxy;
+                        httpClientHandler.UseProxy = httpClientHandler.Proxy != null;
+                        httpClientHandler.PreAuthenticate = Configuration.PreAuthenticate;
+                    }
+                }
+                return _handler;
+            }
+        }
 
         public HttpClient Client
         {
