@@ -1,6 +1,7 @@
 ﻿using Cate.Http.Factories;
 using Cate.Http.Serializers;
 using System;
+using System.Xml;
 
 namespace Cate.Http.Configuration
 {
@@ -24,10 +25,23 @@ namespace Cate.Http.Configuration
             return this;
         }
 
-        public Registry UseSerializer<T>()
+        public Registry UseJsonSerializer<T>()
             where T : ISerializer, new()
         {
             Configuration.JsonSerializer = new T();
+            return this;
+        }
+
+        public Registry UseXmlSerializer<T>()
+            where T : ISerializer, new()
+        {
+            Configuration.XmlSerializer = new T();
+            return this;
+        }
+
+        public Registry WithXmlWriterSettings(XmlWriterSettings settings)
+        {
+            Configuration.XmlSerializer.Settings = settings;
             return this;
         }
 

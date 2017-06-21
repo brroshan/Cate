@@ -18,6 +18,7 @@ namespace Cate.Http.Configuration
         public IClientFactory HttpClientFactory { get; set; }
 
         public ISerializer JsonSerializer { get; set; }
+        public ISerializer XmlSerializer { get; set; }
 
         public CateConfiguration Clone() => (CateConfiguration)MemberwiseClone();
         
@@ -25,6 +26,7 @@ namespace Cate.Http.Configuration
         {
             HttpClientFactory = new StandardFactory();
             JsonSerializer = new JsonNETSerializer();
+            XmlSerializer = new StandardXmlSerializer();
             Timeout = TimeSpan.FromSeconds(30);
         }
     }

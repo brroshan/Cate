@@ -5,16 +5,22 @@ namespace Cate.Http.Serializers
 {
     public class JsonNETSerializer : ISerializer
     {
+        public object Settings { get; set; }
+
         public T Deserialize<T>(string s) => JsonConvert.DeserializeObject<T>(s);
 
         public T Deserialize<T>(Stream s)
         {
             using (var sr = new StreamReader(s))
             using (var tr = new JsonTextReader(sr)) {
-                return JsonSerializer.CreateDefault().Deserialize<T>(tr);
+                return JsonSerializer
+                    .Create(Settings as JsonSerializerSettings).Deserialize<T>(tr);
             }
         }
 
-        public string Serialize<T>(T data) => JsonConvert.SerializeObject(data);
+        public string Serialize<T>(T data)
+        {
+            return JsonConvert.SerializeObject(data, Settings as JsonSerializerSettings);
+        }
     }
 }
