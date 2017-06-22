@@ -77,11 +77,17 @@ namespace Cate.Http.Configuration
             return this;
         }
 
-        public Registry WithBasicAuthentication(string username, string password)
+        public Registry WithBasicAuth(string username, string password)
         {
             Configuration.BasicAuthCredentials =
                 new KeyValuePair<string, string>(username,
                     password);
+            return this;
+        }
+
+        public Registry WithOAuth(string token)
+        {
+            Configuration.OAuthAccessToken = token;
             return this;
         }
     }

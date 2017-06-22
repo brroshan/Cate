@@ -30,13 +30,19 @@ namespace Cate.Http.Utils
         public static bool IsXml(this HttpResponseMessage response)
             => response.MediaType().Contains("xml");
 
-        public static void SetBasicAuthentication(this HttpClient client, string username,
+        public static void SetBasicAuthHeader(this HttpClient client, string username,
                                                   string password)
         {
             var auth =
                 Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}"));
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Basic", auth);
+        }
+
+        public static void SetOAuthHeader(this HttpClient client, string token)
+        {
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
         }
     }
 }

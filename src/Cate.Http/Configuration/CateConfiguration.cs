@@ -15,7 +15,6 @@ namespace Cate.Http.Configuration
         }
 
         public Uri BaseAddress { get; set; }
-
         public TimeSpan Timeout { get; set; }
 
         public IClientFactory HttpClientFactory { get; set; }
@@ -28,11 +27,14 @@ namespace Cate.Http.Configuration
         public IWebProxy Proxy { get; set; }
         public bool PreAuthenticate { get; set; }
         public ICredentials Credentials { get; set; }
-        public KeyValuePair<string, string> BasicAuthCredentials { get; set; }
 
+        public KeyValuePair<string, string> BasicAuthCredentials { get; set; }
         public bool IsUsingBasicAuth =>
             !IsNullOrWhiteSpace(BasicAuthCredentials.Key) ||
             !IsNullOrWhiteSpace(BasicAuthCredentials.Value);
+
+        public string OAuthAccessToken { get; set; }
+        public bool IsUsingOAuth => !IsNullOrWhiteSpace(OAuthAccessToken);
 
         private void StandardConfiguration()
         {
