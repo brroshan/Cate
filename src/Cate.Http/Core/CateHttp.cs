@@ -75,16 +75,24 @@ namespace Cate.Http.Core
             {
                 if (_client == null) {
                     _client = Configuration.HttpClientFactory.GetClient(MessageHandler);
-                    _client.BaseAddress = Configuration.BaseAddress;
-                    _client.Timeout = Configuration.Timeout;
-
-                    if (Configuration.IsUsingBasicAuth)
-                        _client.SetBasicAuthentication(
-                            Configuration.BasicAuthCredentials.Key,
-                            Configuration.BasicAuthCredentials.Value);
+                    SetClient();
                 }
                 return _client;
             }
+        }
+
+        private void SetClient()
+        {
+            _client.BaseAddress = Configuration.BaseAddress;
+            _client.Timeout = Configuration.Timeout;
+
+            if (Configuration.IsUsingBasicAuth)
+                _client.SetBasicAuthHeader(
+                    Configuration.BasicAuthCredentials.Key,
+                    Configuration.BasicAuthCredentials.Value);
+
+            if (Configuration.IsUsingOAuth)
+                _client.SetOAuthHeader(Configuration.OAuthAccessToken);
         }
 
         public async Task<HttpResponseMessage> SendAsync(
