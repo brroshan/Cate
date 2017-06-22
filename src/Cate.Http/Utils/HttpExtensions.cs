@@ -1,5 +1,7 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using Cate.Http.Core;
 
 namespace Cate.Http.Utils
@@ -27,5 +29,14 @@ namespace Cate.Http.Utils
 
         public static bool IsXml(this HttpResponseMessage response)
             => response.MediaType().Contains("xml");
+
+        public static void SetBasicAuthentication(this HttpClient client, string username,
+                                                  string password)
+        {
+            var auth =
+                Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}"));
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Basic", auth);
+        }
     }
 }

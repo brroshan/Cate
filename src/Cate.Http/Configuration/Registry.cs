@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Xml;
+using System.Collections.Generic;
 using Cate.Http.Factories;
 using Cate.Http.Serializers;
 
@@ -70,9 +71,17 @@ namespace Cate.Http.Configuration
             return this;
         }
 
-        public Registry WithCredentialCache(ICredentials cc)
+        public Registry WithAuthProtocolCredentials(ICredentials cc)
         {
             Configuration.Credentials = cc;
+            return this;
+        }
+
+        public Registry WithBasicAuthentication(string username, string password)
+        {
+            Configuration.BasicAuthCredentials =
+                new KeyValuePair<string, string>(username,
+                    password);
             return this;
         }
     }

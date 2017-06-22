@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net;
+using System.Collections.Generic;
 using Cate.Http.Factories;
 using Cate.Http.Serializers;
+using static System.String;
 
 namespace Cate.Http.Configuration
 {
@@ -26,6 +28,11 @@ namespace Cate.Http.Configuration
         public IWebProxy Proxy { get; set; }
         public bool PreAuthenticate { get; set; }
         public ICredentials Credentials { get; set; }
+        public KeyValuePair<string, string> BasicAuthCredentials { get; set; }
+
+        public bool IsUsingBasicAuth =>
+            !IsNullOrWhiteSpace(BasicAuthCredentials.Key) ||
+            !IsNullOrWhiteSpace(BasicAuthCredentials.Value);
 
         private void StandardConfiguration()
         {

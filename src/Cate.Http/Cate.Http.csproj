@@ -51,6 +51,7 @@
     <Compile Include="Content\JsonBody.cs" />
     <Compile Include="Content\StringBody.cs" />
     <Compile Include="Content\XmlBody.cs" />
+    <Compile Include="Core\CateConfigExtensions.cs" />
     <Compile Include="Core\CateHttp.cs" />
     <Compile Include="Core\CateHttpContext.cs" />
     <Compile Include="Core\CateHttpException.cs" />

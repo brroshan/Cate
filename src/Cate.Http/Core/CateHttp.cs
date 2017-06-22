@@ -77,6 +77,11 @@ namespace Cate.Http.Core
                     _client = Configuration.HttpClientFactory.GetClient(MessageHandler);
                     _client.BaseAddress = Configuration.BaseAddress;
                     _client.Timeout = Configuration.Timeout;
+
+                    if (Configuration.IsUsingBasicAuth)
+                        _client.SetBasicAuthentication(
+                            Configuration.BasicAuthCredentials.Key,
+                            Configuration.BasicAuthCredentials.Value);
                 }
                 return _client;
             }
