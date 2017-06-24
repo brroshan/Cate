@@ -2,33 +2,42 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Cate.Http.Configuration;
 using Cate.Http.Core;
+using static Cate.Http.Configuration.CateStartup;
 
 namespace Cate.Http.Handlers
 {
     public class StandardMessageHandler : DelegatingHandler
     {
-        public StandardMessageHandler(HttpMessageHandler innerHandler) : base(innerHandler)
+        public StandardMessageHandler(HttpMessageHandler innerHandler) :
+            base(innerHandler)
         { }
 
         protected override async Task<HttpResponseMessage> SendAsync(
             HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var context = CateHttpContext.Extract(request);
+            await Emit(EventType.Start, context);
 
             try {
-                context.Response = await BaseSendAsync(context, request, cancellationToken)
-                    .ConfigureAwait(false);
+                context.Response =
+                    await BaseSendAsync(context, request, cancellationToken)
+                        .ConfigureAwait(false);
                 context.Response.RequestMessage = request;
 
-                if (context.Successful)
+                if (context.Succeeded)
                     return context.Response;
 
                 throw new CateHttpException(context);
             }
             catch (Exception ex) {
                 context.Error = ex;
+                await Emit(EventType.Error, context);
                 throw;
+            }
+            finally {
+                await Emit(EventType.Ended, context);
             }
         }
 
@@ -37,7 +46,8 @@ namespace Cate.Http.Handlers
             CancellationToken cancellationToken)
         {
             try {
-                return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+                return await base.SendAsync(request, cancellationToken)
+                                 .ConfigureAwait(false);
             }
             catch (Exception ex) {
                 throw new CateHttpException(context, ex);

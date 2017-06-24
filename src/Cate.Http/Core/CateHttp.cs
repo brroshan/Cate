@@ -42,8 +42,6 @@ namespace Cate.Http.Core
             }
         }
 
-        public string BaseUrl => Configuration.BaseAddress.AbsoluteUri;
-
         public CateConfiguration Configuration { get; set; }
 
         public HttpMessageHandler MessageHandler
@@ -54,14 +52,14 @@ namespace Cate.Http.Core
                     _handler = Configuration.HttpClientFactory.GetHandler();
 
                     if (_handler is HttpClientHandler httpClientHandler) {
-                        ConfigureClientHandler(httpClientHandler);
+                        SetClientHandler(httpClientHandler);
                     }
                 }
                 return _handler;
             }
         }
 
-        private void ConfigureClientHandler(HttpClientHandler httpClientHandler)
+        private void SetClientHandler(HttpClientHandler httpClientHandler)
         {
             httpClientHandler.Proxy = Configuration.Proxy;
             httpClientHandler.UseProxy = Configuration.Proxy != null;
@@ -98,14 +96,20 @@ namespace Cate.Http.Core
         public async Task<HttpResponseMessage> SendAsync(
             string url, HttpMethod method, MimeType mimeType, HttpContent body = null)
         {
-            var uri = BaseUrl + url;
-            var request = new HttpRequestMessage(method, uri) { Content = body };
+            CateHttpContext context = null;
 
-            request.Accept(mimeType);
+            try {
+                var uri = url.AppendTo(Configuration.BaseAddress);
+                var request =
+                    new HttpRequestMessage(method, uri) { Content = body };
+                request.Accept(mimeType);
+                context = new CateHttpContext(request, Configuration);
 
-            var context = new CateHttpContext(request, Configuration);
-
-            return await Client.SendAsync(request).ConfigureAwait(false);
+                return await Client.SendAsync(request).ConfigureAwait(false);
+            }
+            catch when (context != null && context.HasHandledException) {
+                return context.Response;
+            }
         }
     }
 }

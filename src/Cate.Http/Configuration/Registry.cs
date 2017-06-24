@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net;
 using System.Xml;
+using System.Threading.Tasks;
 using System.Collections.Generic;
+using Cate.Http.Core;
 using Cate.Http.Factories;
 using Cate.Http.Serializers;
 
@@ -88,6 +90,24 @@ namespace Cate.Http.Configuration
         public Registry WithOAuth(string token)
         {
             Configuration.OAuthAccessToken = token;
+            return this;
+        }
+
+        public Registry OnStartAsync(Func<CateHttpContext, Task> onStart)
+        {
+            Configuration.OnStartAsync = onStart;
+            return this;
+        }
+
+        public Registry OnErrorAsync(Func<CateHttpContext, Task> onError)
+        {
+            Configuration.OnErrorAsync = onError;
+            return this;
+        }
+
+        public Registry OnEndedAsync(Func<CateHttpContext, Task> onEnded)
+        {
+            Configuration.OnEndedAsync = onEnded;
             return this;
         }
     }

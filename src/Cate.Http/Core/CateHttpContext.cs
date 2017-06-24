@@ -24,10 +24,11 @@ namespace Cate.Http.Core
         public HttpRequestMessage Request { get; }
         public HttpResponseMessage Response { get; set; }
 
-        public Exception Error { get; set; }
+        public Exception Error { get; internal set; }
 
         public bool Completed => Response != null;
-        public bool Successful => Completed && Response.IsSuccessStatusCode;
+        public bool Succeeded => Completed && Response.IsSuccessStatusCode;
+        public bool HasHandledException { get; set; }
 
         internal static CateHttpContext Extract(HttpRequestMessage request)
         {
