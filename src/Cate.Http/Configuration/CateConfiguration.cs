@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Net;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Cate.Http.Core;
 using Cate.Http.Factories;
 using Cate.Http.Serializers;
 using static System.String;
@@ -14,7 +16,20 @@ namespace Cate.Http.Configuration
             StandardConfiguration();
         }
 
-        public Uri BaseAddress { get; set; }
+        private Uri _baseAddress;
+
+        public Uri BaseAddress
+        {
+            get => _baseAddress;
+            set
+            {
+                if (value.OriginalString.EndsWith("/"))
+                    _baseAddress = value;
+
+                _baseAddress = new Uri($"{value.OriginalString}/");
+            }
+        }
+
         public TimeSpan Timeout { get; set; }
 
         public IClientFactory HttpClientFactory { get; set; }
@@ -41,7 +56,11 @@ namespace Cate.Http.Configuration
             HttpClientFactory = new StandardFactory();
             JsonSerializer = new JsonNETSerializer();
             XmlSerializer = new StandardXmlSerializer();
-            Timeout = TimeSpan.FromSeconds(30);
+            Timeout = TimeSpan.FromSeconds(100);
         }
+
+        public Func<CateHttpContext, Task> OnStartAsync { get; set; }
+        public Func<CateHttpContext, Task> OnErrorAsync { get; set; }
+        public Func<CateHttpContext, Task> OnEndedAsync { get; set; }
     }
 }

@@ -31,7 +31,7 @@ namespace Cate.Http.Utils
             => response.MediaType().Contains("xml");
 
         public static void SetBasicAuthHeader(this HttpClient client, string username,
-                                                  string password)
+                                              string password)
         {
             var auth =
                 Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}"));
@@ -43,6 +43,23 @@ namespace Cate.Http.Utils
         {
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", token);
+        }
+        
+        public static string AppendTo(this string url, Uri baseAddress)
+        {
+            if (string.IsNullOrEmpty(url))
+                throw new Exception("You must specify a resource or absolute uri.");
+
+            if (url.StartsWith("/"))
+                url = url.Substring(1);
+
+            var uri = baseAddress?.AbsoluteUri + url;
+
+            if (!Uri.TryCreate(uri, UriKind.Absolute, out Uri _))
+                throw new Exception(
+                    $"Unable invoke an http request with the url '{uri}'.");
+
+            return uri;
         }
     }
 }

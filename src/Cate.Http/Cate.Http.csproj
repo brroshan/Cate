@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Configuration\CateConfiguration.cs" />
     <Compile Include="Configuration\CateStartup.cs" />
+    <Compile Include="Configuration\EventType.cs" />
     <Compile Include="Configuration\Registry.cs" />
     <Compile Include="Content\JsonBody.cs" />
     <Compile Include="Content\StringBody.cs" />

@@ -13,6 +13,8 @@ namespace Cate.Http.Core
             if (response == null) return default(T);
 
             var context = CateHttpContext.Extract(response.RequestMessage);
+            if (!context.Succeeded) return default(T);
+
             try {
                 if (response.IsJson())
                     using (var stream =
