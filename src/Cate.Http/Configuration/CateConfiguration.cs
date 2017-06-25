@@ -32,7 +32,7 @@ namespace Cate.Http.Configuration
 
         public TimeSpan Timeout { get; set; }
 
-        public IClientFactory HttpClientFactory { get; set; }
+        public IClientFactory Factory { get; set; }
 
         public ISerializer JsonSerializer { get; set; }
         public ISerializer XmlSerializer { get; set; }
@@ -44,6 +44,7 @@ namespace Cate.Http.Configuration
         public ICredentials Credentials { get; set; }
 
         public KeyValuePair<string, string> BasicAuthCredentials { get; set; }
+
         public bool IsUsingBasicAuth =>
             !IsNullOrWhiteSpace(BasicAuthCredentials.Key) ||
             !IsNullOrWhiteSpace(BasicAuthCredentials.Value);
@@ -53,7 +54,7 @@ namespace Cate.Http.Configuration
 
         private void StandardConfiguration()
         {
-            HttpClientFactory = new StandardFactory();
+            Factory = new StandardFactory();
             JsonSerializer = new JsonNETSerializer();
             XmlSerializer = new StandardXmlSerializer();
             Timeout = TimeSpan.FromSeconds(100);
