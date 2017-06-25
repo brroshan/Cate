@@ -49,7 +49,7 @@ namespace Cate.Http.Core
             get
             {
                 if (_handler == null) {
-                    _handler = Configuration.HttpClientFactory.GetHandler();
+                    _handler = Configuration.Factory.GetHandler();
 
                     if (_handler is HttpClientHandler httpClientHandler) {
                         SetClientHandler(httpClientHandler);
@@ -72,7 +72,7 @@ namespace Cate.Http.Core
             get
             {
                 if (_client == null) {
-                    _client = Configuration.HttpClientFactory.GetClient(MessageHandler);
+                    _client = Configuration.Factory.GetClient(MessageHandler);
                     SetClient();
                 }
                 return _client;

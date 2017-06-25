@@ -25,7 +25,7 @@ namespace Cate.Http.Configuration
         public Registry UseFactory<T>()
             where T : IClientFactory, new()
         {
-            Configuration.HttpClientFactory = new T();
+            Configuration.Factory = new T();
             return this;
         }
 
@@ -73,7 +73,7 @@ namespace Cate.Http.Configuration
             return this;
         }
 
-        public Registry WithAuthProtocolCredentials(ICredentials cc)
+        public Registry WithCredentials(ICredentials cc)
         {
             Configuration.Credentials = cc;
             return this;
@@ -82,8 +82,7 @@ namespace Cate.Http.Configuration
         public Registry WithBasicAuth(string username, string password)
         {
             Configuration.BasicAuthCredentials =
-                new KeyValuePair<string, string>(username,
-                    password);
+                new KeyValuePair<string, string>(username, password);
             return this;
         }
 
@@ -93,21 +92,21 @@ namespace Cate.Http.Configuration
             return this;
         }
 
-        public Registry OnStartAsync(Func<CateHttpContext, Task> onStart)
+        public Registry OnStartAsync(Func<CateHttpContext, Task> handler)
         {
-            Configuration.OnStartAsync = onStart;
+            Configuration.OnStartAsync = handler;
             return this;
         }
 
-        public Registry OnErrorAsync(Func<CateHttpContext, Task> onError)
+        public Registry OnErrorAsync(Func<CateHttpContext, Task> handler)
         {
-            Configuration.OnErrorAsync = onError;
+            Configuration.OnErrorAsync = handler;
             return this;
         }
 
-        public Registry OnEndedAsync(Func<CateHttpContext, Task> onEnded)
+        public Registry OnEndedAsync(Func<CateHttpContext, Task> handler)
         {
-            Configuration.OnEndedAsync = onEnded;
+            Configuration.OnEndedAsync = handler;
             return this;
         }
     }
