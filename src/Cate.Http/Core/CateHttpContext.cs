@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net.Http;
+using System.Timers;
 using Cate.Http.Configuration;
 
 namespace Cate.Http.Core
@@ -8,12 +10,15 @@ namespace Cate.Http.Core
     {
         private const string Key = "CateHttp";
 
-        internal CateHttpContext(HttpRequestMessage request, CateConfiguration configuration)
+        internal CateHttpContext(HttpRequestMessage request,
+                                 CateConfiguration configuration)
         {
             Request = request ?? throw new ArgumentNullException(nameof(request));
-            Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            Configuration = configuration
+                            ?? throw new ArgumentNullException(nameof(configuration));
 
             Uri = new Uri(request.RequestUri.AbsoluteUri);
+            Watch = new Stopwatch();
             request.Properties?.Add(Key, this);
         }
 
@@ -22,9 +27,12 @@ namespace Cate.Http.Core
         public CateConfiguration Configuration { get; set; }
 
         public HttpRequestMessage Request { get; }
-        public HttpResponseMessage Response { get; set; }
+        public HttpResponseMessage Response { get; internal set; }
 
         public Exception Error { get; internal set; }
+
+        internal Stopwatch Watch { get; }
+        public TimeSpan Lasted => Watch.Elapsed;
 
         public bool Completed => Response != null;
         public bool Succeeded => Completed && Response.IsSuccessStatusCode;
@@ -33,11 +41,16 @@ namespace Cate.Http.Core
         internal static CateHttpContext Extract(HttpRequestMessage request)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-            if (request.Properties?.ContainsKey(Key) ?? false) {
+            if (request.Properties?.ContainsKey(Key) ?? false)
                 return (CateHttpContext)request.Properties[Key];
-            }
 
             throw new Exception($"Could not find {Key} in the request");
+        }
+
+        public override string ToString()
+        {
+            return
+                $"Uri: {Uri}, Completed: {Completed}, Succeeded: {Succeeded}, Lasted: {Lasted.TotalSeconds}s.";
         }
     }
 }

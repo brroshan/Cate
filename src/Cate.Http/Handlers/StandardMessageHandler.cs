@@ -18,9 +18,10 @@ namespace Cate.Http.Handlers
             HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var context = CateHttpContext.Extract(request);
-            await Emit(EventType.Start, context);
+            context.Watch.Start();
 
             try {
+                await Emit(EventType.Start, context);
                 context.Response =
                     await BaseSendAsync(context, request, cancellationToken)
                         .ConfigureAwait(false);
@@ -37,6 +38,7 @@ namespace Cate.Http.Handlers
                 throw;
             }
             finally {
+                context.Watch.Stop();
                 await Emit(EventType.Ended, context);
             }
         }

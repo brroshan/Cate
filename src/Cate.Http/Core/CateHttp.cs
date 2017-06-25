@@ -6,7 +6,7 @@ using Cate.Http.Utils;
 
 namespace Cate.Http.Core
 {
-    public interface IHttpCate
+    public interface ICateHttp
     {
         CateConfiguration Configuration { get; set; }
 
@@ -18,7 +18,7 @@ namespace Cate.Http.Core
                                             MimeType mimeType, HttpContent body = null);
     }
 
-    public class CateHttp : IHttpCate
+    public class CateHttp : ICateHttp
     {
         private HttpClient _client;
         private HttpMessageHandler _handler;
