@@ -43,7 +43,7 @@ namespace Cate.Http.Core
 
         public CateSerializerException(CateHttpContext context, Type type,
                                        Exception inner) : this(context,
-            $"Unable to deserialize the data into {type.Namespace}.{type.Name}.", inner)
+            $"Unable to deserialize the data into {type}.", inner)
         { }
     }
 }
