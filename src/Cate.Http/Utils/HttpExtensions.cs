@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Text;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using Cate.Http.Core;
 
 namespace Cate.Http.Utils
@@ -57,7 +57,7 @@ namespace Cate.Http.Utils
 
             if (!Uri.TryCreate(uri, UriKind.Absolute, out Uri _))
                 throw new Exception(
-                    $"Unable invoke an http request with the url '{uri}'.");
+                    $"Unable invoke an http request with the uri '{uri}'.");
 
             return uri;
         }
