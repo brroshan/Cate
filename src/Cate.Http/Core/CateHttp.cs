@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Cate.Http.Configuration;
 using Cate.Http.Utils;
+using Cate.Http.Configuration;
 
 namespace Cate.Http.Core
 {

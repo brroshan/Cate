@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Net.Http;
-using System.Timers;
+using System.Diagnostics;
 using Cate.Http.Configuration;
 
 namespace Cate.Http.Core
@@ -30,6 +29,7 @@ namespace Cate.Http.Core
         public HttpResponseMessage Response { get; internal set; }
 
         public Exception Error { get; internal set; }
+        public string ErrorBody { get; set; }
 
         internal Stopwatch Watch { get; }
         public TimeSpan Lasted => Watch.Elapsed;

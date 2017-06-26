@@ -58,7 +58,6 @@
     <Compile Include="Core\CateHttpException.cs" />
     <Compile Include="Core\MimeType.cs" />
     <Compile Include="Serializers\StandardXmlSerializer.cs" />
-    <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\HttpExtensions.cs" />
     <Compile Include="Core\CateHttpExtensions.cs" />
     <Compile Include="Core\HttpResponseMessageExtensions.cs" />

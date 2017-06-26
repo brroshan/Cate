@@ -2,8 +2,8 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Cate.Http.Configuration;
 using Cate.Http.Core;
+using Cate.Http.Configuration;
 using static Cate.Http.Configuration.CateStartup;
 
 namespace Cate.Http.Handlers
@@ -29,6 +29,10 @@ namespace Cate.Http.Handlers
 
                 if (context.Succeeded)
                     return context.Response;
+
+                if (context.Response.Content != null)
+                    context.ErrorBody = await context
+                        .Response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
                 throw new CateHttpException(context);
             }

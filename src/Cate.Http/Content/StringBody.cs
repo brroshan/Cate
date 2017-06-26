@@ -1,8 +1,9 @@
 ﻿using System.Text;
+using System.Net.Http;
 
 namespace Cate.Http.Content
 {
-    public class StringBody : System.Net.Http.StringContent
+    public class StringBody : StringContent
     {
         public string Body { get; }
 

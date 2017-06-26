@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Cate.Http.Core;
 using Cate.Http.Factories;
 using Cate.Http.Serializers;

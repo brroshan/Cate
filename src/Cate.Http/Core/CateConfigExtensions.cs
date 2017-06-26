@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Xml;
-using Cate.Http.Serializers;
 using Cate.Http.Utils;
+using Cate.Http.Serializers;
 
 namespace Cate.Http.Core
 {
@@ -60,7 +61,8 @@ namespace Cate.Http.Core
             return cate;
         }
 
-        public static ICateHttp UsePreAuthentication(this ICateHttp cate, bool preAuthenticate)
+        public static ICateHttp UsePreAuthentication(this ICateHttp cate,
+                                                     bool preAuthenticate)
         {
             cate.Configuration.PreAuthenticate = preAuthenticate;
             return cate;
