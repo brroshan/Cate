@@ -91,6 +91,10 @@ namespace Cate.Http.Core
 
             if (Configuration.IsUsingOAuth)
                 _client.SetOAuthHeader(Configuration.OAuthAccessToken);
+
+            foreach (var header in Configuration.RequestHeaders) {
+                Client.DefaultRequestHeaders.Add(header.Key, header.Value);
+            }
         }
 
         public async Task<HttpResponseMessage> SendAsync(

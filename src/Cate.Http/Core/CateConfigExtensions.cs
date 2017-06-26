@@ -4,6 +4,7 @@ using System.Net;
 using System.Xml;
 using Cate.Http.Utils;
 using Cate.Http.Serializers;
+using static System.String;
 
 namespace Cate.Http.Core
 {
@@ -71,6 +72,50 @@ namespace Cate.Http.Core
         public static ICateHttp WithCredentials(this ICateHttp cate, ICredentials cc)
         {
             cate.Configuration.Credentials = cc;
+            return cate;
+        }
+
+        public static ICateHttp AddHeader(this ICateHttp cate, string key, string value)
+        {
+            if (IsNullOrWhiteSpace(key)) return cate;
+
+            cate.Client.DefaultRequestHeaders.Add(key, value);
+            return cate;
+        }
+
+        public static ICateHttp AddHeaders(this ICateHttp cate,
+                                            IDictionary<string, string> headers)
+        {
+            if (headers == null) return cate;
+
+            foreach (var header in headers) {
+                if (IsNullOrWhiteSpace(header.Key)) continue;
+                cate.Client.DefaultRequestHeaders.Add(header.Key, header.Value);
+            }
+
+            return cate;
+        }
+
+        public static ICateHttp RemoveHeader(this ICateHttp cate, string key)
+        {
+            cate.Client.DefaultRequestHeaders.Remove(key);
+            return cate;
+        }
+
+        public static ICateHttp RemoveHeaders(this ICateHttp cate, string[] keys)
+        {
+            if (keys == null) return cate;
+
+            foreach (var key in keys) {
+                cate.Client.DefaultRequestHeaders.Remove(key);
+            }
+
+            return cate;
+        }
+
+        public static ICateHttp ClearHeaders(this ICateHttp cate)
+        {
+            cate.Client.DefaultRequestHeaders.Clear();
             return cate;
         }
     }

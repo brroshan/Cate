@@ -21,7 +21,6 @@ namespace Cate.Http.Configuration
 
         internal CateConfiguration Configuration { get; } = new CateConfiguration();
 
-
         public Registry UseFactory<T>()
             where T : IClientFactory, new()
         {
@@ -89,6 +88,25 @@ namespace Cate.Http.Configuration
         public Registry WithOAuth(string token)
         {
             Configuration.OAuthAccessToken = token;
+            return this;
+        }
+
+        public Registry AddHeader(string key, string value)
+        {
+            if (string.IsNullOrWhiteSpace(key)) return this;
+
+            Configuration.RequestHeaders.Add(key, value);
+            return this;
+        }
+
+        public Registry AddHeaders(IDictionary<string, string> headers)
+        {
+            if (headers == null) return this;
+
+            foreach (var header in headers) {
+                Configuration.RequestHeaders.Add(header.Key, header.Value);
+            }
+
             return this;
         }
 
