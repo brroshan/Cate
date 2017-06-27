@@ -3,6 +3,7 @@
     public enum MimeType
     {
         Json,
-        Xml
+        Xml,
+        FormUrlEncoded
     }
 }

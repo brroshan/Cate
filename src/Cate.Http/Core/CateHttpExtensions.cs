@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Cate.Http.Content;
 
@@ -49,5 +50,14 @@ namespace Cate.Http.Core
             this ICateHttp cate, string uri)
             => await cate.SendAsync(uri,
                 HttpMethod.Delete, MimeType.Json);
+
+        public static async Task<HttpResponseMessage> PostFormUrlEncodedAsync(
+            this ICateHttp cate, string uri,
+            IEnumerable<KeyValuePair<string, string>> data)
+        {
+            var body = new FormUrlEncodedContent(data);
+            return await cate.SendAsync(uri, HttpMethod.Post, MimeType.FormUrlEncoded,
+                body);
+        }
     }
 }
