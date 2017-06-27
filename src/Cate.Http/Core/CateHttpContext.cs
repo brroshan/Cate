@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Net.Http;
-using Cate.Http.Content;
 using Cate.Http.Configuration;
+using Cate.Http.Content;
 
 namespace Cate.Http.Core
 {
@@ -31,23 +31,22 @@ namespace Cate.Http.Core
 
         public Exception Error { get; internal set; }
         public string ErrorBody { get; set; }
-
-        public string RequestBody
-        {
-            get
-            {
-                var data = (Request.Content as StringBody)?.Body
-                             ?? Request?.Content?.ReadAsStringAsync().Result;
-                return data ?? "No data sent along in the body of the request.";
-            }
-        }
-
         internal Stopwatch Watch { get; }
         public TimeSpan Lasted => Watch.Elapsed;
 
         public bool Completed => Response != null;
         public bool Succeeded => Completed && Response.IsSuccessStatusCode;
         public bool HasHandledException { get; set; }
+
+        public string RequestBody
+        {
+            get
+            {
+                var data = (Request.Content as StringBody)?.Body
+                           ?? Request?.Content?.ReadAsStringAsync().Result;
+                return data ?? "No data sent along in the body of the request.";
+            }
+        }
 
         internal static CateHttpContext Extract(HttpRequestMessage request)
         {
@@ -58,7 +57,10 @@ namespace Cate.Http.Core
             throw new Exception($"Could not find {Key} in the request");
         }
 
-        public override string ToString() =>
-            $"Uri: {Uri}, Completed: {Completed}, Succeeded: {Succeeded}, Lasted: {Lasted.TotalSeconds}s.";
+        public override string ToString()
+        {
+            return
+                $"Uri: {Uri}, Completed: {Completed}, Succeeded: {Succeeded}, Lasted: {Lasted.TotalSeconds}s.";
+        }
     }
 }
