@@ -10,6 +10,34 @@ namespace Cate.Http.Core
         public static async Task<T> Receive<T>(this Task<HttpResponseMessage> source)
         {
             var response = await source.ConfigureAwait(false);
+            return await Deserialize<T>(response);
+        }
+
+        public static async Task<string> ReceiveString(
+            this Task<HttpResponseMessage> source)
+        {
+            var response = await source.ConfigureAwait(false);
+            return await AsString(response);
+        }
+
+        public static T Receive<T>(this HttpResponseMessage source)
+            => Deserialize<T>(source).Result;
+
+        public static string ReceiveString(this HttpResponseMessage source)
+            => AsString(source).Result;
+
+        private static async Task<string> AsString(HttpResponseMessage response)
+        {
+            if (response == null) return null;
+
+            var context = CateHttpContext.Extract(response.RequestMessage);
+            if (!context.Succeeded) return null;
+
+            return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        }
+
+        private static async Task<T> Deserialize<T>(HttpResponseMessage response)
+        {
             if (response == null) return default(T);
 
             var context = CateHttpContext.Extract(response.RequestMessage);
