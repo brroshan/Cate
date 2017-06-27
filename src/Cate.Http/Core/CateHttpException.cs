@@ -25,7 +25,7 @@ namespace Cate.Http.Core
         private static string ToMessage(CateHttpContext context, Exception inner)
         {
             return context.Response == null
-                ? $"The request to {context.Uri.AbsoluteUri} ended without a response form the remote machine. {inner?.Message} {inner?.GetBaseException().Message}"
+                ? $"The request to {context.Uri.AbsoluteUri} ended without a response from the remote machine. {inner?.Message} {inner?.GetBaseException().Message}"
                 : $"The request to {context.Uri.AbsoluteUri} ended with statuscode {(int)context.Response.StatusCode} {context.Response.ReasonPhrase}.";
         }
     }
