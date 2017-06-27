@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Cate.Http.Content;
 
 namespace Cate.Http.Core
@@ -59,5 +59,38 @@ namespace Cate.Http.Core
             return await cate.SendAsync(uri, HttpMethod.Post, MimeType.FormUrlEncoded,
                 body);
         }
+
+        public static HttpResponseMessage GetJson(
+            this ICateHttp cate, string uri)
+            => cate.GetJsonAsync(uri).Result;
+
+        public static HttpResponseMessage PutJson<T>(
+            this ICateHttp cate, string uri, T data)
+            => cate.PutJsonAsync(uri, data).Result;
+
+        public static HttpResponseMessage PostJson<T>(
+            this ICateHttp cate, string uri, T data)
+            => cate.PostJsonAsync(uri, data).Result;
+
+        public static HttpResponseMessage GetXml(
+            this ICateHttp cate, string uri)
+            => cate.GetXmlAsync(uri).Result;
+
+        public static HttpResponseMessage PutXml<T>(
+            this ICateHttp cate, string uri, T data)
+            => cate.PutXmlAsync(uri, data).Result;
+
+        public static HttpResponseMessage PostXml<T>(
+            this ICateHttp cate, string uri, T data)
+            => cate.PostXmlAsync(uri, data).Result;
+
+        public static HttpResponseMessage PostFormUrlEncode(
+            this ICateHttp cate, string uri,
+            IEnumerable<KeyValuePair<string, string>> data)
+            => cate.PostFormUrlEncodedAsync(uri, data).Result;
+
+        public static HttpResponseMessage Delete(
+            this ICateHttp cate, string uri)
+            => cate.DeleteAsync(uri).Result;
     }
 }
