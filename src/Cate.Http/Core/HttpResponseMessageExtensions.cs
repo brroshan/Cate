@@ -29,9 +29,7 @@ namespace Cate.Http.Core
         private static async Task<string> AsString(HttpResponseMessage response)
         {
             if (response == null) return null;
-
-            var context = CateHttpContext.Extract(response.RequestMessage);
-            if (!context.Succeeded) return null;
+            if (!response.IsSuccessStatusCode) return null;
 
             return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
         }
@@ -39,9 +37,9 @@ namespace Cate.Http.Core
         private static async Task<T> Deserialize<T>(HttpResponseMessage response)
         {
             if (response == null) return default(T);
+            if (!response.IsSuccessStatusCode) return default(T);
 
             var context = CateHttpContext.Extract(response.RequestMessage);
-            if (!context.Succeeded) return default(T);
 
             try {
                 if (response.IsJson())

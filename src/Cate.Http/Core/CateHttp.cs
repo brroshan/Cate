@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Cate.Http.Utils;
 using Cate.Http.Configuration;
+using Cate.Http.Handlers;
+using Cate.Http.Utils;
 
 namespace Cate.Http.Core
 {
@@ -37,10 +38,10 @@ namespace Cate.Http.Core
         public CateHttp(string baseAddress)
             : this()
         {
-            if (!string.IsNullOrWhiteSpace(baseAddress)) {
+            if (!string.IsNullOrWhiteSpace(baseAddress))
                 Configuration.BaseAddress = new Uri(baseAddress);
-            }
         }
+
 
         public CateConfiguration Configuration { get; set; }
 
@@ -51,20 +52,11 @@ namespace Cate.Http.Core
                 if (_handler == null) {
                     _handler = Configuration.Factory.GetHandler();
 
-                    if (_handler is HttpClientHandler httpClientHandler) {
+                    if (_handler is HttpClientHandler httpClientHandler)
                         SetClientHandler(httpClientHandler);
-                    }
                 }
                 return _handler;
             }
-        }
-
-        private void SetClientHandler(HttpClientHandler httpClientHandler)
-        {
-            httpClientHandler.Proxy = Configuration.Proxy;
-            httpClientHandler.UseProxy = Configuration.Proxy != null;
-            httpClientHandler.PreAuthenticate = Configuration.PreAuthenticate;
-            httpClientHandler.Credentials = Configuration.Credentials;
         }
 
         public HttpClient Client
@@ -76,24 +68,6 @@ namespace Cate.Http.Core
                     SetClient();
                 }
                 return _client;
-            }
-        }
-
-        private void SetClient()
-        {
-            _client.BaseAddress = Configuration.BaseAddress;
-            _client.Timeout = Configuration.Timeout;
-
-            if (Configuration.IsUsingBasicAuth)
-                _client.SetBasicAuthHeader(
-                    Configuration.BasicAuthCredentials.Key,
-                    Configuration.BasicAuthCredentials.Value);
-
-            if (Configuration.IsUsingOAuth)
-                _client.SetOAuthHeader(Configuration.OAuthAccessToken);
-
-            foreach (var header in Configuration.RequestHeaders) {
-                Client.DefaultRequestHeaders.Add(header.Key, header.Value);
             }
         }
 
@@ -113,6 +87,32 @@ namespace Cate.Http.Core
             }
             catch when (context != null && context.HasHandledException) {
                 return context.Response;
+            }
+        }
+
+        private void SetClientHandler(HttpClientHandler httpClientHandler)
+        {
+            httpClientHandler.Proxy = Configuration.Proxy;
+            httpClientHandler.UseProxy = Configuration.Proxy != null;
+            httpClientHandler.PreAuthenticate = Configuration.PreAuthenticate;
+            httpClientHandler.Credentials = Configuration.Credentials;
+        }
+
+        private void SetClient()
+        {
+            _client.BaseAddress = Configuration.BaseAddress;
+            _client.Timeout = Configuration.Timeout;
+
+            if (Configuration.IsUsingBasicAuth)
+                _client.SetBasicAuthHeader(
+                    Configuration.BasicAuthCredentials.Key,
+                    Configuration.BasicAuthCredentials.Value);
+
+            if (Configuration.IsUsingOAuth)
+                _client.SetOAuthHeader(Configuration.OAuthAccessToken);
+
+            foreach (var header in Configuration.RequestHeaders) {
+                Client.DefaultRequestHeaders.Add(header.Key, header.Value);
             }
         }
     }

@@ -22,7 +22,7 @@ namespace Cate.Http.Configuration
         internal CateConfiguration Configuration { get; } = new CateConfiguration();
 
         public Registry UseFactory<T>()
-            where T : IClientFactory, new()
+            where T : IFactory, new()
         {
             Configuration.Factory = new T();
             return this;

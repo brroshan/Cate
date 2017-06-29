@@ -8,7 +8,7 @@ using static Cate.Http.Configuration.CateStartup;
 
 namespace Cate.Http.Handlers
 {
-    public class StandardMessageHandler : DelegatingHandler
+    internal class StandardMessageHandler : DelegatingHandler
     {
         public StandardMessageHandler(HttpMessageHandler innerHandler) :
             base(innerHandler)

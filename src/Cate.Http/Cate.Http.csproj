@@ -57,6 +57,9 @@
     <Compile Include="Core\CateHttpContext.cs" />
     <Compile Include="Core\CateHttpException.cs" />
     <Compile Include="Core\MimeType.cs" />
+    <Compile Include="Factories\IFactory.cs" />
+    <Compile Include="Factories\MockFactory.cs" />
+    <Compile Include="Handlers\MockMessageHandler.cs" />
     <Compile Include="Serializers\StandardXmlSerializer.cs" />
     <Compile Include="Utils\HttpExtensions.cs" />
     <Compile Include="Core\CateHttpExtensions.cs" />

@@ -27,7 +27,7 @@ namespace Cate.Http.Configuration
         }
 
         public TimeSpan Timeout { get; set; }
-        public IClientFactory Factory { get; set; }
+        public IFactory Factory { get; set; }
         public ISerializer JsonSerializer { get; set; }
         public ISerializer XmlSerializer { get; set; }
         public IWebProxy Proxy { get; set; }
