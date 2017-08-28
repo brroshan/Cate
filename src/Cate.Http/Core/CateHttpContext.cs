@@ -13,9 +13,8 @@ namespace Cate.Http.Core
         internal CateHttpContext(HttpRequestMessage request,
                                  CateConfiguration configuration)
         {
-            Request = request ?? throw new ArgumentNullException(nameof(request));
-            Configuration = configuration
-                            ?? throw new ArgumentNullException(nameof(configuration));
+            Request = request;
+            Configuration = configuration;
 
             Uri = new Uri(request.RequestUri.AbsoluteUri);
             Watch = new Stopwatch();
@@ -50,11 +49,10 @@ namespace Cate.Http.Core
 
         internal static CateHttpContext Extract(HttpRequestMessage request)
         {
-            if (request == null) throw new ArgumentNullException(nameof(request));
             if (request.Properties?.ContainsKey(Key) ?? false)
                 return (CateHttpContext)request.Properties[Key];
 
-            throw new Exception($"Could not find {Key} in the request");
+            return new CateHttpContext(request, CateStartup.Registry.Configuration.Clone());
         }
 
         public override string ToString()

@@ -16,14 +16,19 @@ namespace Cate.Http.Configuration
 
             switch (on) {
                 case EventType.Start:
+                    if (configuration.OnStartAsync == null) return TaskCompleted;
                     return configuration.OnStartAsync(context);
                 case EventType.Error:
+                    if (configuration.OnErrorAsync == null) return TaskCompleted;
                     return configuration.OnErrorAsync(context);
                 case EventType.Ended:
+                    if (configuration.OnEndedAsync == null) return TaskCompleted;
                     return configuration.OnEndedAsync(context);
                 default:
-                    return Task.FromResult<object>(null);
+                    return TaskCompleted;
             }
         }
+
+        private static Task<object> TaskCompleted => Task.FromResult<object>(null);
     }
 }

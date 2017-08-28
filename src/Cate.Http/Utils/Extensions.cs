@@ -2,11 +2,12 @@
 using System.Text;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using Cate.Http.Core;
 
 namespace Cate.Http.Utils
 {
-    internal static class HttpExtensions
+    public static class Extensions
     {
         public static void Accept(this HttpRequestMessage source, MimeType accept)
         {
@@ -21,14 +22,14 @@ namespace Cate.Http.Utils
             source.Headers.AcceptCharset.Add(new StringWithQualityHeaderValue("UTF-8"));
         }
 
-        public static string MediaType(this HttpResponseMessage response)
+        public static string ContentMediaType(this HttpResponseMessage response)
             => response.Content.Headers.ContentType.MediaType;
 
         public static bool IsJson(this HttpResponseMessage response)
-            => response.MediaType().Contains("json");
+            => response.ContentMediaType().Contains("json");
 
         public static bool IsXml(this HttpResponseMessage response)
-            => response.MediaType().Contains("xml");
+            => response.ContentMediaType().Contains("xml");
 
         public static void SetBasicAuthHeader(this HttpClient client, string username,
                                               string password)
@@ -57,9 +58,40 @@ namespace Cate.Http.Utils
 
             if (!Uri.TryCreate(uri, UriKind.Absolute, out Uri _))
                 throw new Exception(
-                    $"Unable invoke an http request with the uri '{uri}'.");
+                    $"Unable to invoke an http request with the uri '{uri}'.");
 
             return uri;
+        }
+
+        public static async Task<T> Deserialize<T>(HttpResponseMessage response)
+        {
+            if (response == null) return default(T);
+            if (!response.IsSuccessStatusCode) return default(T);
+
+            var context = CateHttpContext.Extract(response.RequestMessage);
+
+            try {
+                if (response.IsJson())
+                    using (var stream =
+                        await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                        return context.Configuration.JsonSerializer.Deserialize<T>(stream);
+
+                if (response.IsXml())
+                    using (var stream =
+                        await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                        return context.Configuration.XmlSerializer.Deserialize<T>(stream);
+
+                throw new CateHttpException(context,
+                    $"Unsupported media type ({response.ContentMediaType()})", null);
+            }
+            catch (CateHttpException ex) {
+                context.Error = ex;
+                throw;
+            }
+            catch (Exception ex) {
+                context.Error = ex;
+                throw new CateSerializerException(context, typeof(T), ex);
+            }
         }
     }
 }
